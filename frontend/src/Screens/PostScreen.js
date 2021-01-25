@@ -34,7 +34,9 @@ const PostScreen = ({ match }) => {
   }, [match]);
   return (
     <>
-      <Link className="btn btn-light my-3">Go Back</Link>
+      <Link to="/" className="btn btn-light my-3">
+        Go Back
+      </Link>
       <Row>
         <Col md={6}>
           <Card.Title>{post.title}</Card.Title>
