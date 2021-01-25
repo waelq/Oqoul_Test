@@ -1,18 +1,24 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
+
 import postRoutes from "./routes/postRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+
 import { notFound, errorHandler } from "./Middleware/errorMeddleware.js";
 
 dotenv.config();
 connectDB();
 const app = express();
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("API is runing");
 });
 
 app.use("/api/posts", postRoutes);
+app.use("/api/users", userRoutes);
+
 // route not found
 app.use(notFound);
 // error path in route
