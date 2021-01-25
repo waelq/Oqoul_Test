@@ -1,51 +1,43 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
-import {
-  Row,
-  Col,
-  Image,
-  ListGroup,
-  Card,
-  Button,
-  Form,
-} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Row, Col, Card } from "react-bootstrap";
 
-// import { useDispatch, useSelector } from "react-redux";
-// import Message from "../Components/Message";
-
-// import {
-//   detailsProducts,
-//   CreateProductsReview,
-//   createProducts,
-// } from "../action/productAction";
-// import Loader from "../Components/Loader";
+import { listPostDetails } from "../action/postAction";
+import Loader from "../Components/Loader";
+import Message from "../Components/Message";
 // import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstants";
 
 const PostScreen = ({ match }) => {
-  const [post, setPost] = useState([]);
+  const dispatch = useDispatch();
+
+  const postDetails = useSelector((state) => state.postDetails);
+  const { loading, error, post } = postDetails;
+  
   // data from backend
   useEffect(() => {
-    const fetchPost = async () => {
-      const { data } = await axios.get(`/api/posts/${match.params.id}`);
-      setPost(data);
-    };
-    fetchPost();
-  }, [match]);
+    dispatch(listPostDetails(match.params.id));
+  }, [dispatch, match]);
   return (
     <>
       <Link to="/" className="btn btn-light my-3">
         Go Back
       </Link>
-      <Row>
-        <Col md={6}>
-          <Card.Title>{post.title}</Card.Title>
-          <Card.Title>{post.text}</Card.Title>
-        </Col>
-        <Col md={6}>
-          <Card.Title>{post.name}</Card.Title>
-        </Col>
-      </Row>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <Row>
+          <Col md={6}>
+            <Card.Title>{post.title}</Card.Title>
+            <Card.Title>{post.text}</Card.Title>
+          </Col>
+          <Col md={6}>
+            <Card.Title>{post.name}</Card.Title>
+          </Col>
+        </Row>
+      )}
     </>
   );
 };
