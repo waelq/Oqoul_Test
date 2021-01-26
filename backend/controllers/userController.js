@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    res.send("Invaled user data");
+    throw new Error("Ivalid data");
   }
 });
 
@@ -74,39 +74,37 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// // @desc Updata user Profile
-// // @route PUT /api/users/profile
-// // @access Private
+// @desc Updata user Profile
+// @route PUT /api/users/profile
+// @access Private
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
 
-// const updataUserProfile = asyncHandler(async (req, res) => {
-//   const user = await User.findById(req.user._id);
-//   if (user) {
-//     user.name = req.body.name || user.name;
-//     user.email = req.body.email || user.email;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
 
-//     if (req.body.password) {
-//       user.password = req.body.password;
-//     }
+    const updatedUser = await user.save();
 
-//     const updataUser = await user.save();
-
-//     res.json({
-//       _id: updataUser._id,
-//       name: updataUser.name,
-//       email: updataUser.email,
-//       isAdmin: updataUser.isAdmin,
-//       token: generateToken(updataUser._id),
-//     });
-//   } else {
-//     res.status(404);
-//     throw new Error("User not found");
-//   }
-// });
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
 
 // // @desc GET  all users
 // // @route GET /api/users
 // // @access Private/Admin
-
 // const getUsers = asyncHandler(async (req, res) => {
 //   const users = await User.find({});
 //   res.json(users);
@@ -169,8 +167,8 @@ export {
   authUser,
   getUserProfile,
   registerUser,
-  //   updataUserProfile,
-  //   getUsers,
+  updateUserProfile,
+   //   getUsers,
   //   deleteUsers,
   //   getUsersById,
   //   updataUser,
