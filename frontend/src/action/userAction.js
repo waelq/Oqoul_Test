@@ -14,13 +14,13 @@ import {
   USER_UPDATE_SECCESS,
   USER_UPDATE_FAIL,
   USER_UPDATE_RESET,
-  // USER_LIST_REQUEST,
-  // USER_LIST_SECCESS,
-  // USER_LIST_FAIL,
-  // USER_LIST_RESET,
-  // USER_DELETE_REQUEST,
-  // USER_DELETE_SECCESS,
-  // USER_DELETE_FAIL,
+  USER_LIST_REQUEST,
+  USER_LIST_SECCESS,
+  USER_LIST_FAIL,
+  USER_LIST_RESET,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SECCESS,
+  USER_DELETE_FAIL,
   // USER_UPDATE_ADMIN_REQUEST,
   // USER_UPDATE_ADMIN_SECCESS,
   // USER_UPDATE_ADMIN_FAIL,
@@ -60,6 +60,7 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGIN_LOGOUT });
+  dispatch({ type: USER_LIST_RESET });
 };
 // Rgister
 export const register = (name, email, password) => async (dispatch) => {
@@ -167,67 +168,67 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     });
   }
 };
-// // List user
-// export const listUsers = () => async (dispatch, getState) => {
-//   try {
-//     dispatch({
-//       type: USER_LIST_REQUEST,
-//     });
-//     const {
-//       userLogin: { userInfo },
-//     } = getState();
-//     const config = {
-//       headers: {
-//         Authorization: `Bearer ${userInfo.token}`,
-//       },
-//     };
-//     const { data } = await axios.get(`/api/users`, config);
+// User List
+export const listUsers = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_LIST_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/users`, config);
 
-//     dispatch({
-//       type: USER_LIST_SECCESS,
-//       payload: data,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: USER_LIST_FAIL,
-//       payload:
-//         error.response && error.response.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     });
-//   }
-// };
+    dispatch({
+      type: USER_LIST_SECCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+// User Delete
+export const deleteUser = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_DELETE_REQUEST,
+    });
 
-// // user Delete
-// export const deleteUser = (id) => async (dispatch, getState) => {
-//   try {
-//     dispatch({
-//       type: USER_DELETE_REQUEST,
-//     });
-//     const {
-//       userLogin: { userInfo },
-//     } = getState();
-//     const config = {
-//       headers: {
-//         Authorization: `Bearer ${userInfo.token}`,
-//       },
-//     };
-//     await axios.delete(`/api/users/${id}`, config);
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-//     dispatch({
-//       type: USER_DELETE_SECCESS,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: USER_DELETE_FAIL,
-//       payload:
-//         error.response && error.response.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     });
-//   }
-// };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    await axios.delete(`/api/users/${id}`, config);
 
+    dispatch({
+      type: USER_DELETE_SECCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 // // updateuser by admin
 // export const updateUserAdmin = (user) => async (dispatch, getState) => {
 //   try {

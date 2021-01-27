@@ -6,25 +6,22 @@ import {
   getUserProfile,
   registerUser,
   updateUserProfile,
-  // getUsers,
-  // deleteUsers,
+  getUsers,
+  deleteUser,
   // getUsersById,
   // updataUser,
 } from "../controllers/userController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
-router.route("/").post(registerUser);
-// .get(protect, admin, getUsers);
+router.route("/").post(registerUser).get(protect, admin, getUsers);
 router.post("/login", authUser);
 router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
 
-// router
-//   .route("/:id")
-//   .delete(protect, admin, deleteUsers)
-//   .get(protect, admin, getUsersById)
-//   .put(protect, admin, updateUser);
+router.route("/:id").delete(protect, admin, deleteUser);
+// .get(protect, admin, getUsersById)
+// .put(protect, admin, updateUser);
 
 export default router;
