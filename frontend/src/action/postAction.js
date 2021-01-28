@@ -6,18 +6,19 @@ import {
   POST_DETAILS_REQUEST,
   POST_DETAILS_SUCCESS,
   POST_DETAILS_FAIL,
-  PRODUCT_DELETE_REQUEST,
-  PRODUCT_DELETE_SUCCESS,
-  PRODUCT_DELETE_FAIL,
-  // PRODUCT_CREATE_REQUEST,
-  // PRODUCT_CREATE_SUCCESS,
-  // PRODUCT_CREATE_FAIL,
-  // PRODUCT_UPDATE_REQUEST,
-  // PRODUCT_UPDATE_SUCCESS,
-  // PRODUCT_UPDATE_FAIL,
-  // PRODUCT_CREATE_REVIEW_REQUEST,
-  // PRODUCT_CREATE_REVIEW_SUCCESS,
-  // PRODUCT_CREATE_REVIEW_FAIL,
+  POST_DELETE_REQUEST,
+  POST_DELETE_SUCCESS,
+  POST_DELETE_FAIL,
+  POST_CREATE_REQUEST,
+  POST_CREATE_SUCCESS,
+  POST_CREATE_FAIL,
+  POST_UPDATE_REQUEST,
+  POST_UPDATE_SUCCESS,
+  POST_UPDATE_FAIL,
+  POST_LISTUSER_REQUEST,
+  POST_LISTUSER_SUCCESS,
+  POST_LISTUSER_FAIL,
+  POST_LISTUSER_RESET,
 } from "../constants/postConstants";
 
 // List Posts
@@ -52,7 +53,7 @@ export const listPostDetails = (id) => async (dispatch) => {
 // Delete post
 export const deletePost = (id) => async (dispatch, getState) => {
   try {
-    dispatch({ type: PRODUCT_DELETE_REQUEST });
+    dispatch({ type: POST_DELETE_REQUEST });
 
     const {
       userLogin: { userInfo },
@@ -66,10 +67,10 @@ export const deletePost = (id) => async (dispatch, getState) => {
 
     await axios.delete(`/api/posts/${id}`, config);
 
-    dispatch({ type: PRODUCT_DELETE_SUCCESS });
+    dispatch({ type: POST_DELETE_SUCCESS });
   } catch (error) {
     dispatch({
-      type: PRODUCT_DELETE_FAIL,
+      type: POST_DELETE_FAIL,
       payload:
         error.response && error.respons.data.message
           ? error.response.data.message
@@ -78,96 +79,94 @@ export const deletePost = (id) => async (dispatch, getState) => {
   }
 };
 
-// // Create
-// export const createProducts = () => async (dispatch, getState) => {
-//   try {
-//     dispatch({ type: PRODUCT_CREATE_REQUEST });
+// Create post
+export const createPost = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: POST_CREATE_REQUEST });
 
-//     const {
-//       userLogin: { userInfo },
-//     } = getState();
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-//     const config = {
-//       headers: {
-//         Authorization: `Bearer ${userInfo.token}`,
-//       },
-//     };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
 
-//     const { data } = await axios.post(`/api/products`, {}, config);
+    const { data } = await axios.post(`/api/posts`, {}, config);
 
-//     dispatch({ type: PRODUCT_CREATE_SUCCESS, payload: data });
-//   } catch (error) {
-//     dispatch({
-//       type: PRODUCT_CREATE_FAIL,
-//       payload:
-//         error.response && error.respons.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     });
-//   }
-// };
-// // Update
-// export const updateProducts = (product) => async (dispatch, getState) => {
-//   try {
-//     dispatch({ type: PRODUCT_UPDATE_REQUEST });
+    dispatch({ type: POST_CREATE_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: POST_CREATE_FAIL,
+      payload:
+        error.response && error.respons.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
-//     const {
-//       userLogin: { userInfo },
-//     } = getState();
+// Update post
+export const updatePost = (post) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: POST_UPDATE_REQUEST });
 
-//     const config = {
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${userInfo.token}`,
-//       },
-//     };
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-//     const { data } = await axios.put(
-//       `/api/products/${product._id}`,
-//       product,
-//       config
-//     );
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
 
-//     dispatch({ type: PRODUCT_UPDATE_SUCCESS, payload: data });
-//   } catch (error) {
-//     dispatch({
-//       type: PRODUCT_UPDATE_FAIL,
-//       payload:
-//         error.response && error.respons.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     });
-//   }
-// };
-// // create review
-// export const CreateProductsReview = (productId, review) => async (
-//   dispatch,
-//   getState
-// ) => {
-//   try {
-//     dispatch({ type: PRODUCT_CREATE_REVIEW_REQUEST });
+    const { data } = await axios.put(`/api/posts/${post._id}`, post, config);
 
-//     const {
-//       userLogin: { userInfo },
-//     } = getState();
+    dispatch({ type: POST_UPDATE_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: POST_UPDATE_FAIL,
+      payload:
+        error.response && error.respons.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
-//     const config = {
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${userInfo.token}`,
-//       },
-//     };
+// List Posts for user
+export const listPostsUser = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: POST_LISTUSER_REQUEST });
 
-//     await axios.post(`/api/products/${productId}/reviews`, review, config);
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-//     dispatch({ type: PRODUCT_CREATE_REVIEW_SUCCESS });
-//   } catch (error) {
-//     dispatch({
-//       type: PRODUCT_CREATE_REVIEW_FAIL,
-//       payload:
-//         error.response && error.respons.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     });
-//   }
-// };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    console.log(userInfo);
+    const { data } = await axios.get(
+      `http://localhost:5000/api/posts/user/${userInfo._id}`
+    );
+
+    console.log(data, "text");
+
+    dispatch({ type: POST_LISTUSER_SUCCESS, payload: data });
+  } catch (error) {
+    // dispatch({
+    //   type: POST_LISTUSER_FAIL,
+    //   payload: error.response && error.respons ? error.response : error.message,
+    // });
+    console.log(error.message);
+    console.error(error);
+  }
+};

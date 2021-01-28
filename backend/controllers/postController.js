@@ -8,8 +8,8 @@ const getPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({});
   res.json(posts);
 });
-// @desc Fetch single products
-// @route GET /api/products/:id
+// @desc Fetch single post
+// @route GET /api/posts/:id
 // @access Public
 const getPostById = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
@@ -33,54 +33,62 @@ const deletePost = asyncHandler(async (req, res) => {
     throw new Error("Post not found");
   }
 });
-// // @desc Create a products
-// // @route POST /api/products/
-// // @access Private/Admin
-// const createProduct = asyncHandler(async (req, res) => {
-//   const product = new Product({
-//     name: "Sample name",
-//     price: 0,
-//     user: req.user._id,
-//     image: "/image/sample.jpg",
-//     brand: "sample brand",
-//     category: "sample category",
-//     countInStock: 0,
-//     numReviews: 0,
-//     description: "Sample description",
-//   });
-//   const createdProduct = await product.save();
-//   res.status(201).json(createdProduct);
-// });
-// // @desc Update a products
-// // @route PUT /api/products/:id
-// // @access Private/Admin
-// const updateProduct = asyncHandler(async (req, res) => {
-//   const {
-//     name,
-//     price,
-//     image,
-//     brand,
-//     category,
-//     countInStock,
-//     description,
-//   } = req.body;
+// @desc Create a post
+// @route POST /api/posts
+// @access Private
+const createPost = asyncHandler(async (req, res) => {
+  const post = new Post({
+    user: req.user._id,
+    title: "sample title",
+    text: "sample text",
+  });
+  const createdPost = await post.save();
+  res.status(201).json(createdPost);
+});
+// @desc Update a Post
+// @route PUT /api/posts/:id
+// @access Private
+const updatePost = asyncHandler(async (req, res) => {
+  const { title, text } = req.body;
 
-//   const product = await Product.findById(req.params.id);
-//   if (product) {
-//     product.name = name;
-//     product.price = price;
-//     product.image = image;
-//     product.brand = brand;
-//     product.description = description;
-//     product.category = category;
-//     product.countInStock = countInStock;
+  const post = await Post.findById(req.params.id);
 
-//     const updatedProduct = await product.save();
-//     res.status(201).json(updatedProduct);
-//   } else {
-//     res.status(404);
-//     throw new Error("Product not found to update");
-//   }
-// });
+  if (post) {
+    post.title = title;
+    post.text = text;
 
-export { getPosts, getPostById, deletePost };
+    const updatedPost = await post.save();
+    res.status(201).json(updatedPost);
+  } else {
+    res.status(404);
+    throw new Error("Post not found to update");
+  }
+});
+// @desc Fetch  user posts
+// @route GET /api/posts
+// @access Privat/User
+const getPostsUser = async (req, res) => {
+  console.log(req.params.id);
+  try {
+    const posts = await Post.find({ user: req.params.id });
+    res.json(posts);
+    // if (posts) {
+    //   res.json(posts);
+    // }
+    // else {
+    //   res.status(404);
+    //   throw new Error("Post not found");
+    // }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export {
+  getPosts,
+  getPostById,
+  deletePost,
+  createPost,
+  updatePost,
+  getPostsUser,
+};

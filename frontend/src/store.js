@@ -6,6 +6,9 @@ import {
   postListReducer,
   postDetailsReducer,
   postDeleteReducer,
+  postCreateReducer,
+  postUpdateReducer,
+  postUserListReducer,
 } from "./reducer/postReducer";
 import {
   userLoginReducer,
@@ -19,6 +22,9 @@ const reducer = combineReducers({
   postList: postListReducer,
   postDetails: postDetailsReducer,
   postDelete: postDeleteReducer,
+  postCreate: postCreateReducer,
+  postUpdate: postUpdateReducer,
+  postUserList: postUserListReducer,
 
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,

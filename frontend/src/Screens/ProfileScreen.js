@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../Components/Message";
 import Loader from "../Components/Loader";
 import { getUserDetails, updateUserProfile } from "../action/userAction";
-
+import PostOneUser from "./PostOneUser";
 const ProfileScreen = ({ location, history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -106,7 +106,12 @@ const ProfileScreen = ({ location, history }) => {
         </Form>
       </Col>
       <Col md={8}>
-        <h2>My Order</h2>
+        <Row>
+          <h2>My Post</h2>
+        </Row>
+        <Row>
+          {/* <PostOneUser /> */}
+        </Row>
       </Col>
     </Row>
   );

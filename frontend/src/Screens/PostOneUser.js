@@ -4,14 +4,15 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../Components/Message";
 import Loader from "../Components/Loader";
-import { listPosts, deletePost, createPost } from "../action/postAction";
-import { POST_CREATE_RESET } from "../constants/postConstants";
+import { listPostsUser, deletePost, createPost } from "../action/postAction";
+import { POST_LISTUSER_RESET } from "../constants/postConstants";
 
-const PostsListScreen = ({ history, match }) => {
+const PostOneUser = ({ history, match }) => {
   const dispatch = useDispatch();
 
   const postList = useSelector((state) => state.postList);
   const { loading, error, posts } = postList;
+  console.log(posts);
 
   const postDelete = useSelector((state) => state.postDelete);
   const {
@@ -32,16 +33,19 @@ const PostsListScreen = ({ history, match }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    dispatch({ type: POST_CREATE_RESET });
-    if (!userInfo.isAdmin) {
-      history.push("/login");
-    }
-    if (successCreate) {
-      history.push(`/admin/post/${createdPost._id}/edit`);
-    } else {
-      dispatch(listPosts());
-    }
-  }, [dispatch, history, userInfo, successDelete, successCreate, createdPost]);
+    // // dispatch({ type: POST_LISTUSER_RESET });
+    // if (!userInfo) {
+    //   history.push("/login");
+    // }
+    // if (successCreate) {
+    //   history.push(`/user/post/${createdPost._id}/edit`);
+    // } else {
+    dispatch(listPostsUser());
+    // }
+  }, [
+    dispatch,
+    //  history, userInfo, successDelete, successCreate, createdPost
+  ]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure to delete it")) {
@@ -56,9 +60,6 @@ const PostsListScreen = ({ history, match }) => {
   return (
     <>
       <Row className="align-items-center">
-        <Col>
-          <h1>Posts</h1>
-        </Col>
         <Col className="text-right">
           <Button className="my-3" onClick={createProductHandler}>
             <i className="fas fa-plus"></i> Create Post
@@ -79,8 +80,6 @@ const PostsListScreen = ({ history, match }) => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>EMAIL CREATED</th>
-              <th>Name CREATED</th>
               <th>TITLE</th>
               <th>TEXT</th>
             </tr>
@@ -89,8 +88,6 @@ const PostsListScreen = ({ history, match }) => {
             {posts.map((post) => (
               <tr key={post._id}>
                 <td>{post._id}</td>
-                <td>{post.user.email}</td>
-                <td>{post.user.name}</td>
                 <td>{post.title} </td>
                 <td>{post.text}</td>
                 <td>
@@ -116,4 +113,4 @@ const PostsListScreen = ({ history, match }) => {
   );
 };
 
-export default PostsListScreen;
+export default PostOneUser;
