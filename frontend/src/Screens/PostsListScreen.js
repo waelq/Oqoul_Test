@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import ShowMoreText from "react-show-more-text";
+
 import Message from "../Components/Message";
 import Loader from "../Components/Loader";
 import { listPosts, deletePost, createPost } from "../action/postAction";
@@ -49,7 +51,7 @@ const PostsListScreen = ({ history, match }) => {
     }
   };
 
-  const createProductHandler = () => {
+  const createPostHandler = () => {
     dispatch(createPost());
   };
 
@@ -60,7 +62,7 @@ const PostsListScreen = ({ history, match }) => {
           <h1>Posts</h1>
         </Col>
         <Col className="text-right">
-          <Button className="my-3" onClick={createProductHandler}>
+          <Button className="my-3" onClick={createPostHandler}>
             <i className="fas fa-plus"></i> Create Post
           </Button>
         </Col>
@@ -79,8 +81,7 @@ const PostsListScreen = ({ history, match }) => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>EMAIL CREATED</th>
-              <th>Name CREATED</th>
+              <th>User ID CREATED </th>
               <th>TITLE</th>
               <th>TEXT</th>
             </tr>
@@ -89,10 +90,18 @@ const PostsListScreen = ({ history, match }) => {
             {posts.map((post) => (
               <tr key={post._id}>
                 <td>{post._id}</td>
-                <td>{post.user.email}</td>
-                <td>{post.user.name}</td>
+                <td>{post.user}</td>
                 <td>{post.title} </td>
-                <td>{post.text}</td>
+                <ShowMoreText
+                  lines={2}
+                  more="Show more"
+                  less="Show less"
+                  anchorClass=""
+                  expanded={false}
+                >
+                  <td>{post.text}</td>{" "}
+                </ShowMoreText>
+
                 <td>
                   <LinkContainer to={`/admin/post/${post._id}/edit`}>
                     <Button variant="light" className="btn-sm">

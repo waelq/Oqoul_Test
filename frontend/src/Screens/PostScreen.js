@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Card } from "react-bootstrap";
+import ShowMoreText from "react-show-more-text";
 
 import { listPostDetails } from "../action/postAction";
 import Loader from "../Components/Loader";
@@ -13,7 +14,7 @@ const PostScreen = ({ match }) => {
 
   const postDetails = useSelector((state) => state.postDetails);
   const { loading, error, post } = postDetails;
-  
+
   // data from backend
   useEffect(() => {
     dispatch(listPostDetails(match.params.id));
@@ -31,10 +32,22 @@ const PostScreen = ({ match }) => {
         <Row>
           <Col md={6}>
             <Card.Title>{post.title}</Card.Title>
-            <Card.Title>{post.text}</Card.Title>
+            <Row>------------------</Row>
+
+            <ShowMoreText
+              lines={3}
+              more="Show more"
+              less="Show less"
+              anchorClass=""
+              expanded={false}
+            >
+              <Card.Title>{post.text}</Card.Title>
+            </ShowMoreText>
           </Col>
           <Col md={6}>
-            <Card.Title>{post.name}</Card.Title>
+            <Card.Title>Created By:-</Card.Title>
+            <Row>------------------</Row>
+            <Card.Title>{post.user}</Card.Title>
           </Col>
         </Row>
       )}
@@ -43,49 +56,3 @@ const PostScreen = ({ match }) => {
 };
 
 export default PostScreen;
-
-// const [qty, setQty] = useState(1);
-// const [rating, setRating] = useState(0);
-// const [comment, setComment] = useState("");
-
-// const dispatch = useDispatch();
-
-// const productDetails = useSelector((state) => state.productDetails);
-// const { loading, product, error } = productDetails;
-
-// const userLogin = useSelector((state) => state.userLogin);
-// const { userInfo } = userLogin;
-
-// const productReviewCreate = useSelector((state) => state.productReviewCreate);
-// const {
-//   success: successProductReview,
-//   error: errorProductReview,
-// } = productReviewCreate;
-
-// useEffect(() => {
-//   if (successProductReview) {
-//     alert("Review Submited");
-//     setRating(0);
-//     setComment("");
-//     dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
-//   }
-//   dispatch(detailsProducts(match.params.id));
-// }, [dispatch, match, successProductReview]);
-
-// // const product = {};
-
-// // Add to Cart
-// const addToCart = () => {
-//   history.push(`/cart/${match.params.id}?qty=${qty}`);
-// };
-
-// // Add review
-// const submitHandler = (e) => {
-//   e.preventDefualt();
-//   dispatch(
-//     CreateProductsReview(match.params.id, {
-//       rating,
-//       comment,
-//     })
-//   );
-// };

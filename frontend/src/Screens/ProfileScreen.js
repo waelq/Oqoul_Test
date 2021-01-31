@@ -29,7 +29,7 @@ const ProfileScreen = ({ location, history }) => {
     if (!userInfo) {
       history.push("/login");
     } else {
-      if (!user.name) {
+      if (!user._id) {
         dispatch(getUserDetails("profile"));
       } else {
         setName(user.name);
@@ -51,7 +51,7 @@ const ProfileScreen = ({ location, history }) => {
 
   return (
     <Row>
-      <Col md={4}>
+      <Col md={6}>
         <h2>User Profile</h2>
 
         {message && <Message variant="danger">{message}</Message>}
@@ -101,18 +101,11 @@ const ProfileScreen = ({ location, history }) => {
           </Form.Group>
 
           <Button type="submit" variant="primary">
-            Updata
+            Updata !
           </Button>
         </Form>
       </Col>
-      <Col md={8}>
-        <Row>
-          <h2>My Post</h2>
-        </Row>
-        <Row>
-          {/* <PostOneUser /> */}
-        </Row>
-      </Col>
+      <Col md={6}></Col>
     </Row>
   );
 };

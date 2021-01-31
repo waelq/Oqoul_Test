@@ -6,14 +6,15 @@ import { listPosts } from "../action/postAction";
 import Message from "../Components/Message";
 import Loader from "../Components/Loader";
 
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
+  const keyword = match.params.keyword;
   const dispatch = useDispatch();
   const postList = useSelector((state) => state.postList);
   const { loading, posts, error } = postList;
   // data from backend
   useEffect(() => {
-    dispatch(listPosts());
-  }, [dispatch]);
+    dispatch(listPosts(keyword));
+  }, [dispatch,keyword]);
   return (
     <>
       <h1>List Post</h1>

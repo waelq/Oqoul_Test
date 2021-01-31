@@ -13,6 +13,7 @@ import {
 const router = express.Router();
 
 router.route("/").get(getPosts).post(protect, createPost);
+
 router
   .route("/:id")
   .get(getPostById)

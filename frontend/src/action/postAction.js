@@ -22,10 +22,10 @@ import {
 } from "../constants/postConstants";
 
 // List Posts
-export const listPosts = () => async (dispatch) => {
+export const listPosts = (keyword = "") => async (dispatch) => {
   try {
     dispatch({ type: POST_LIST_REQUEST });
-    const { data } = await axios.get(`/api/posts`);
+    const { data } = await axios.get(`/api/posts?keyword=${keyword}`);
     dispatch({ type: POST_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

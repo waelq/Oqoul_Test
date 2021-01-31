@@ -5,6 +5,7 @@ import cors from "cors";
 
 import postRoutes from "./routes/postRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import { getPostsUser } from "./controllers/postController.js";
 
 import { notFound, errorHandler } from "./Middleware/errorMeddleware.js";
 
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
+// app.use("/api/posts/user/:id", getPostsUser);
 
 // route not found
 app.use(notFound);

@@ -33,19 +33,16 @@ const PostOneUser = ({ history, match }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    // // dispatch({ type: POST_LISTUSER_RESET });
-    // if (!userInfo) {
-    //   history.push("/login");
-    // }
-    // if (successCreate) {
-    //   history.push(`/user/post/${createdPost._id}/edit`);
-    // } else {
-    dispatch(listPostsUser());
-    // }
-  }, [
-    dispatch,
-    //  history, userInfo, successDelete, successCreate, createdPost
-  ]);
+    // dispatch({ type: POST_LISTUSER_RESET });
+    if (!userInfo) {
+      history.push("/login");
+    }
+    if (successCreate) {
+      history.push(`/user/post/${createdPost._id}/edit`);
+    } else {
+      dispatch(listPostsUser());
+    }
+  }, [dispatch, history, userInfo, successDelete, successCreate, createdPost]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure to delete it")) {

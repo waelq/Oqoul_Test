@@ -1,8 +1,9 @@
 import React from "react";
+import { Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-
+import SearchBox from "./SearchBox";
 import { logout } from "../action/userAction";
 
 const Header = () => {
@@ -25,10 +26,11 @@ const Header = () => {
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            <Route render={({ history }) => <SearchBox history={history} />} />
             <Nav className="ml-auto">
-              <LinkContainer to="/post">
+              <LinkContainer to="/">
                 <Nav.Link>
-                  <i className="fas fa-mail-bulk"></i> post
+                  <i className="fas fa-mail-bulk"></i> posts
                 </Nav.Link>
               </LinkContainer>
               {userInfo ? (
@@ -36,9 +38,9 @@ const Header = () => {
                   <LinkContainer to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
-                  {/* <LinkContainer to="/users/postuser">
-                    <NavDropdown.Item>Posts</NavDropdown.Item>
-                  </LinkContainer> */}
+                  <LinkContainer to={`/posts/user/${userInfo._id}`}>
+                    <NavDropdown.Item>My Posts</NavDropdown.Item>
+                  </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
                   </NavDropdown.Item>
@@ -53,10 +55,10 @@ const Header = () => {
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown title="Admin" id="adminmenu">
                   <LinkContainer to="/admin/userlist">
-                    <NavDropdown.Item>Users</NavDropdown.Item>
+                    <NavDropdown.Item>All Users</NavDropdown.Item>
                   </LinkContainer>
                   <LinkContainer to="/admin/postlist">
-                    <NavDropdown.Item>Posts</NavDropdown.Item>
+                    <NavDropdown.Item>All Posts</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
               )}

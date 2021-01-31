@@ -5,7 +5,15 @@ import Post from "../models/postModel.js";
 // @route GET /api/posts
 // @access Public
 const getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({});
+  const keyword = req.query.keyword
+    ? {
+        title: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
+  const posts = await Post.find({ ...keyword });
   res.json(posts);
 });
 // @desc Fetch single post
@@ -39,8 +47,8 @@ const deletePost = asyncHandler(async (req, res) => {
 const createPost = asyncHandler(async (req, res) => {
   const post = new Post({
     user: req.user._id,
-    title: "sample title",
-    text: "sample text",
+    title: " ",
+    text: " ",
   });
   const createdPost = await post.save();
   res.status(201).json(createdPost);
@@ -58,7 +66,7 @@ const updatePost = asyncHandler(async (req, res) => {
     post.text = text;
 
     const updatedPost = await post.save();
-    res.status(201).json(updatedPost);
+    res.json(updatedPost);
   } else {
     res.status(404);
     throw new Error("Post not found to update");
@@ -69,18 +77,13 @@ const updatePost = asyncHandler(async (req, res) => {
 // @access Privat/User
 const getPostsUser = async (req, res) => {
   console.log(req.params.id);
-  try {
-    const posts = await Post.find({ user: req.params.id });
+  const posts = await Post.find({ user: req.params.id });
+  res.json(posts);
+  if (posts) {
     res.json(posts);
-    // if (posts) {
-    //   res.json(posts);
-    // }
-    // else {
-    //   res.status(404);
-    //   throw new Error("Post not found");
-    // }
-  } catch (error) {
-    console.error(error);
+  } else {
+    res.status(404);
+    throw new Error("Post not found");
   }
 };
 

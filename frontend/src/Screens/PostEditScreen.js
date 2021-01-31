@@ -30,7 +30,7 @@ const PostEditScreen = ({ match, history }) => {
       dispatch({ type: POST_UPDATE_RESET });
       history.push("/admin/postlist");
     } else {
-      if (!post.name || post._id !== postId) {
+      if (post._id !== postId) {
         dispatch(listPostDetails(postId));
       } else {
         setTitle(post.title);
@@ -69,6 +69,7 @@ const PostEditScreen = ({ match, history }) => {
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
+                minLength={5}
                 placeholder="Enter Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -82,6 +83,7 @@ const PostEditScreen = ({ match, history }) => {
                 placeholder="Enter text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
+                errorMessage="First name cannot be empty."
               ></Form.Control>
             </Form.Group>
 

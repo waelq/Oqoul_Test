@@ -10,10 +10,10 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_SECCESS,
   USER_DETAILS_FAIL,
+  USER_DETAILS_RESET,
   USER_UPDATE_REQUEST,
   USER_UPDATE_SECCESS,
   USER_UPDATE_FAIL,
-  USER_UPDATE_RESET,
   USER_LIST_REQUEST,
   USER_LIST_SECCESS,
   USER_LIST_FAIL,
@@ -21,9 +21,9 @@ import {
   USER_DELETE_REQUEST,
   USER_DELETE_SECCESS,
   USER_DELETE_FAIL,
-  // USER_UPDATE_ADMIN_REQUEST,
-  // USER_UPDATE_ADMIN_SECCESS,
-  // USER_UPDATE_ADMIN_FAIL,
+  USER_UPDATE_BYADMIN_REQUEST,
+  USER_UPDATE_BYADMIN_SECCESS,
+  USER_UPDATE_BYADMIN_FAIL,
 } from "../constants/userConstants";
 
 // Login
@@ -60,6 +60,7 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGIN_LOGOUT });
+  dispatch({ type: USER_DETAILS_RESET });
   dispatch({ type: USER_LIST_RESET });
 };
 // Rgister
@@ -229,38 +230,40 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     });
   }
 };
-// // updateuser by admin
-// export const updateUserAdmin = (user) => async (dispatch, getState) => {
-//   try {
-//     dispatch({
-//       type: USER_UPDATE_ADMIN_REQUEST,
-//     });
-//     const {
-//       userLogin: { userInfo },
-//     } = getState();
+// Update user by admin
+export const updateUserByAdmin = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_BYADMIN_REQUEST,
+    });
 
-//     const config = {
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${userInfo.token}`,
-//       },
-//     };
-//     const { data } = await axios.put(`/api/users/${user._id}`, user, config);
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-//     dispatch({
-//       type: USER_UPDATE_ADMIN_SECCESS,
-//     });
-//     dispatch({
-//       type: USER_DETAILS_SECCESS,
-//       payload: data,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: USER_UPDATE_ADMIN_FAIL,
-//       payload:
-//         error.response && error.response.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     });
-//   }
-// };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
+
+    dispatch({
+      type: USER_UPDATE_BYADMIN_SECCESS,
+    });
+
+    dispatch({
+      type: USER_DETAILS_SECCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_BYADMIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

@@ -9,6 +9,7 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_SECCESS,
   USER_DETAILS_FAIL,
+  USER_DETAILS_RESET,
   USER_UPDATE_REQUEST,
   USER_UPDATE_SECCESS,
   USER_UPDATE_FAIL,
@@ -20,10 +21,10 @@ import {
   USER_DELETE_REQUEST,
   USER_DELETE_SECCESS,
   USER_DELETE_FAIL,
-  // USER_UPDATE_ADMIN_REQUEST,
-  // USER_UPDATE_ADMIN_SECCESS,
-  // USER_UPDATE_ADMIN_FAIL,
-  // USER_UPDATE_ADMIN_RESET,
+  USER_UPDATE_BYADMIN_REQUEST,
+  USER_UPDATE_BYADMIN_SECCESS,
+  USER_UPDATE_BYADMIN_FAIL,
+  USER_UPDATE_BYADMIN_RESET,
 } from "../constants/userConstants";
 
 // login
@@ -63,6 +64,8 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
       return { loading: false, user: action.payload };
     case USER_DETAILS_FAIL:
       return { loading: false, error: action.payload };
+    case USER_DETAILS_RESET:
+      return {};
     default:
       return state;
   }
@@ -109,19 +112,21 @@ export const userDeleteReducer = (state = {}, action) => {
       return state;
   }
 };
-// // updateuser By Admin
-// export const userUpdateAdminReducer = (state = { user: {} }, action) => {
-//   switch (action.type) {
-//     case USER_UPDATE_ADMIN_REQUEST:
-//       return { loading: true };
-//     case USER_UPDATE_ADMIN_SECCESS:
-//       return { loading: false, success: true };
-//     case USER_UPDATE_ADMIN_FAIL:
-//       return { loading: false, error: action.payload };
-//     case USER_UPDATE_ADMIN_RESET:
-//       return { user: {} };
+// User Update by admin
+export const userUpdateByAdminReducer = (state = { user: {} }, action) => {
+  switch (action.type) {
+    case USER_UPDATE_BYADMIN_REQUEST:
+      return { loading: true };
+    case USER_UPDATE_BYADMIN_SECCESS:
+      return { loading: false, success: true };
+    case USER_UPDATE_BYADMIN_FAIL:
+      return { loading: false, error: action.payload };
+    case USER_UPDATE_BYADMIN_RESET:
+      return {
+        user: {},
+      };
 
-//     default:
-//       return state;
-//   }
-// };
+    default:
+      return state;
+  }
+};
