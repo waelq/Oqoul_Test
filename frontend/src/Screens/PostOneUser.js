@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../Components/Message";
 import Loader from "../Components/Loader";
 import { listPostsUser, deletePost, createPost } from "../action/postAction";
-import { POST_LISTUSER_RESET } from "../constants/postConstants";
+// import { POST_LISTUSER_RESET } from "../constants/postConstants";
 
 const PostOneUser = ({ history, match }) => {
   const dispatch = useDispatch();
@@ -50,6 +51,12 @@ const PostOneUser = ({ history, match }) => {
     }
   };
 
+  const postsUser = [];
+  for (var i = 0; i < posts.length; i++) {
+    if (posts[i].user === userInfo._id) {
+      postsUser.push(posts[i]);
+    }
+  }
   const createProductHandler = () => {
     dispatch(createPost());
   };
@@ -82,13 +89,13 @@ const PostOneUser = ({ history, match }) => {
             </tr>
           </thead>
           <tbody>
-            {posts.map((post) => (
+            {postsUser.map((post) => (
               <tr key={post._id}>
                 <td>{post._id}</td>
                 <td>{post.title} </td>
                 <td>{post.text}</td>
                 <td>
-                  <LinkContainer to={`/admin/post/${post._id}/edit`}>
+                  <LinkContainer to={`/user/post/${post._id}/edit`}>
                     <Button variant="light" className="btn-sm">
                       <i className="fas fa-edit"></i>
                     </Button>

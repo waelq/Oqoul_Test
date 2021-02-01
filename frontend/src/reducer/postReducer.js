@@ -19,7 +19,6 @@ import {
   POST_LISTUSER_REQUEST,
   POST_LISTUSER_SUCCESS,
   POST_LISTUSER_FAIL,
-  POST_LISTUSER_RESET,
 } from "../constants/postConstants";
 
 // List Post

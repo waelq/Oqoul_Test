@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,7 +39,7 @@ const PostsListScreen = ({ history, match }) => {
       history.push("/login");
     }
     if (successCreate) {
-      history.push(`/admin/post/${createdPost._id}/edit`);
+      history.push(`/user/post/${createdPost._id}/edit`);
     } else {
       dispatch(listPosts());
     }
@@ -103,7 +103,7 @@ const PostsListScreen = ({ history, match }) => {
                 </ShowMoreText>
 
                 <td>
-                  <LinkContainer to={`/admin/post/${post._id}/edit`}>
+                  <LinkContainer to={`/user/post/${post._id}/edit`}>
                     <Button variant="light" className="btn-sm">
                       <i className="fas fa-edit"></i>
                     </Button>

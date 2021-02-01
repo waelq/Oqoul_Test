@@ -30,8 +30,8 @@ const App = () => {
           <Route path="/admin/user/:id/edit" component={UserEditScreen} />
 
           <Route path="/admin/postlist" component={PostsListScreen} />
-          <Route path="/admin/post/:id/edit" component={PostEditScreen} />
-          {/* <Route path="/posts/user/:id" component={PostOneUser} /> */}
+          <Route path="/user/post/:id/edit" component={PostEditScreen} />
+          <Route path="/posts/user/:id" component={PostOneUser} />
 
           <Route path="/" component={HomeScreen} exact />
           <Route path="/search/:keyword" component={HomeScreen} exact />

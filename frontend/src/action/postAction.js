@@ -17,8 +17,7 @@ import {
   POST_UPDATE_FAIL,
   POST_LISTUSER_REQUEST,
   POST_LISTUSER_SUCCESS,
-  POST_LISTUSER_FAIL,
-  POST_LISTUSER_RESET,
+  // POST_LISTUSER_FAIL,
 } from "../constants/postConstants";
 
 // List Posts
@@ -147,12 +146,12 @@ export const listPostsUser = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // };
     console.log(userInfo);
     const { data } = await axios.get(
       `http://localhost:5000/api/posts/user/${userInfo._id}`
