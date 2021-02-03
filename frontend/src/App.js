@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
@@ -16,7 +16,42 @@ import UserEditScreen from "./Screens/UserEditScreen";
 import PostsListScreen from "./Screens/PostsListScreen";
 import PostEditScreen from "./Screens/PostEditScreen";
 import PostOneUser from "./Screens/PostOneUser";
+
+import DashboardPage from "./Screens/DashboardPage";
+import ChatroomPage from "./Screens/ChatroomPage";
+import io from "socket.io-client";
+import makeToast from "./Toaster";
+
 const App = () => {
+  const [socket, setSocket] = React.useState(null);
+
+  const setupSocket = () => {
+    const token = localStorage.getItem("CC_Token");
+    if (token && !socket) {
+      const newSocket = io("http://localhost:8000", {
+        query: {
+          token: localStorage.getItem("CC_Token"),
+        },
+      });
+
+      newSocket.on("disconnect", () => {
+        setSocket(null);
+        setTimeout(setupSocket, 3000);
+        makeToast("error", "Socket Disconnected!");
+      });
+
+      newSocket.on("connect", () => {
+        makeToast("success", "Socket Connected!");
+      });
+
+      setSocket(newSocket);
+    }
+  };
+
+  React.useEffect(() => {
+    setupSocket();
+    //eslint-disable-next-line
+  }, []);
   return (
     <Router>
       <Header />
@@ -35,6 +70,17 @@ const App = () => {
 
           <Route path="/" component={HomeScreen} exact />
           <Route path="/search/:keyword" component={HomeScreen} exact />
+
+          <Route
+            path="/dashboard"
+            render={() => <DashboardPage socket={socket} />}
+            exact
+          />
+          <Route
+            path="/chatroom/:id"
+            render={() => <ChatroomPage socket={socket} />}
+            exact
+          />
         </Container>
       </main>
       <Footer />

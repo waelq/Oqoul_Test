@@ -120,7 +120,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.get(`/api/users/${id}`, config);
-
+    console.log(id);
     dispatch({
       type: USER_DETAILS_SECCESS,
       payload: data,

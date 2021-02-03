@@ -1,22 +1,76 @@
-const notFound = (req, res, next) => {
-  const error = new Error(`Not Found - ${req.originalUrl}`);
-  res.status(404);
-  next(error);
+/*
+  Catch Errors Handler
+*/
+
+const catchErrors = (fn) => {
+  return function (req, res, next) {
+    fn(req, res, next).catch((err) => {
+      //Validation Errors
+      if (typeof err === "string") {
+        res.status(400).json({
+          message: err,
+        });
+      } else {
+        next(err);
+      }
+    });
+  };
 };
 
-// (err, req, res, next) => {
-//   res.locals.error = err;
-//   const status = err.status || 500;
-//   res.status(status);
-//   res.render('error');
+/*
+  MongoDB Validation Error Handler
 
-const errorHandler = (err, req, res, next) => {
-  const stateCode = res.stateCode === 200 ? 500 : res.stateCode;
-  res.status(stateCode);
-  console.log(err);
-  res.json({
-    message: err.message,
-    stack: process.env.NODE_ENV === "production" ? null : err.stack,
+  Detect if there are mongodb validation errors that we send them nicely back.
+*/
+
+const mongoseErrors = (err, req, res, next) => {
+  if (!err.errors) return next(err);
+  const errorKeys = Object.keys(err.errors);
+  let message = "";
+  errorKeys.forEach((key) => (message += err.errors[key].message + ", "));
+
+  message = message.substr(0, message.length - 2);
+
+  res.status(400).json({
+    message,
   });
 };
-export { notFound, errorHandler };
+
+/*
+  Development Error Handler
+
+  In development we show good error messages so if we hit a syntax error or any other previously un-handled error, we can show good info on what happened
+*/
+const developmentErrors = (err, req, res, next) => {
+  err.stack = err.stack || "";
+  const errorDetails = {
+    message: err.message,
+    status: err.status,
+    stack: err.stack,
+  };
+
+  res.status(err.status || 500).json(errorDetails); // send JSON back
+};
+
+/*
+  Production Error Handler
+
+  No stacktraces and error details are leaked to user
+*/
+const productionErrors = (err, req, res, next) => {
+  res.status(err.status || 500).json({
+    error: "Internal Server Error",
+  }); // send JSON back
+};
+
+/*
+404 Page Error
+*/
+
+const notFound = (req, res, next) => {
+  res.status(404).json({
+    message: "Route not found",
+  });
+};
+
+export { catchErrors, mongoseErrors, developmentErrors, notFound };

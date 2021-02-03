@@ -5,6 +5,8 @@ import store from "./store";
 import "./index.css";
 import "./bootstrap.min.css";
 import App from "./App";
+// import "./styles/common.css";
+// import "./styles/chatroom.css";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(

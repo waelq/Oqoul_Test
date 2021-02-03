@@ -9,6 +9,7 @@ import { USER_UPDATE_BYADMIN_RESET } from "../constants/userConstants";
 
 const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id;
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
@@ -17,6 +18,8 @@ const UserEditScreen = ({ match, history }) => {
 
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
+
+  console.log(user, userId);
 
   const userUpdate = useSelector((state) => state.userUpdate);
   const {
@@ -30,17 +33,17 @@ const UserEditScreen = ({ match, history }) => {
       dispatch({ type: USER_UPDATE_BYADMIN_RESET });
       history.push("/admin/userlist");
     } else {
-      // !user.name || user.id !== userId
+      // !user.name || user._id !== userId
       if (!userId) {
         dispatch(getUserDetails(userId));
-      } else {
-        setName(user.name);
-        setEmail(user.email);
-        setIsAdmin(user.isAdmin);
       }
+      // else {
+      //   setName(user.name);
+      //   setEmail(user.email);
+      //   setIsAdmin(user.isAdmin);
+      // }
     }
-  }, [dispatch, history, userId, user, successUpdate]);
-
+  }, [dispatch, history, user, userId, successUpdate]);
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(updateUserByAdmin({ _id: userId, name, email, isAdmin }));
@@ -66,7 +69,7 @@ const UserEditScreen = ({ match, history }) => {
               <Form.Control
                 type="text"
                 placeholder="Enter Name"
-                value={name}
+                value={user.name}
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -76,7 +79,7 @@ const UserEditScreen = ({ match, history }) => {
               <Form.Control
                 type="email"
                 placeholder="Enter Email"
-                value={email}
+                value={userId.email}
                 onChange={(e) => setEmail(e.target.value)}
               ></Form.Control>
             </Form.Group>
